@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <title>Vue Playground</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <style>
+            body{
+                width: 100vw;
+                height: 100vh;
+                margin: 0;
+                overflow: auto;
+                padding-bottom: 100px;
+            }
+            #app{
+                width: fit-content;
+                padding: 10px;
+            }
+            button{
+                width: 100%;
+            }
+            .hide {
+                display: none;
+            }
+            .show {
+                display: flex;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <div id = "app" title="hello" v-bind:style="style">
+            <h2>{{title}}</h2>
+            <div v-for="(todo, index) in todos">
+                <span 
+                    v-if="!todo.editable"
+                    v-on:click="editTodo(todo, index)">
+                    {{todo.text}}
+                </span>
+                <input 
+                    v-bind:id="'edit-input'+index"
+                    v-bind:class="[ !todo.editable ? 'hide' : 'show']"
+                    v-model="todo.text"
+                    v-on:blur="editTodo(todo)">
+            </div>
+            <br><br>
+            <button v-on:click="addMoreTodo">+</button>
+        </div>
+        
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    title: `Mike's Todo List`,
+                    style: `
+                        background: black;
+                        color: white;
+                    `,
+                    todos: [
+                        {text: 'Learn JavaScript', editable: false},
+                        {text: 'Learn Vue', editable: false},
+                        {text: 'Make Personal Site In Vue', editable: false}
+                    ]
+                },
+                methods: {
+                    addMoreTodo: function() {
+                        this.todos.push({text: 'added more items', editable: false})
+                    },
+                    editTodo: function(todo, index) {
+                        todo.editable = !todo.editable;
+                        if(todo.editable){     
+                            window.setTimeout(() => document.getElementById('edit-input'+index).focus(), 0);
+                        }
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>
